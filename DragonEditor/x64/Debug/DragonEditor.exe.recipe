@@ -2,7 +2,7 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
-      <FullPath>G:\Development\Dragon\x64\Debug\DragonEditor.exe</FullPath>
+      <FullPath>G:\Development\DragonEngine\x64\Debug\DragonEditor.exe</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles />

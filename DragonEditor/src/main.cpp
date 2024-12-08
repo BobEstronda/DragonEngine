@@ -8,6 +8,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <Rendering/Essentials/ShaderLoader.h>
 
+#include "Logger/Logger.h"
+
 class Camera2D
 {
 private:
@@ -128,6 +130,7 @@ bool LoadTexture(const std::string& filepath, int& width,int& height,bool blende
 
 int main() 
 {
+	DRAGON_INIT_LOGS(true, true);
 	bool bRunning = true;
 
 	// init SDL
@@ -214,7 +217,7 @@ int main()
 	//now can load the texture
 	if (!LoadTexture("assets/textures/Checkpoint (Flag Idle)(64x64).png", width, height, false))
 	{
-		std::cout << "Failed to load Texture!\n";
+		DRAGON_ERROR("Failed to load Texture!");
 		return -1;
 	};
 

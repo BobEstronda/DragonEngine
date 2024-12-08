@@ -1,21 +1,21 @@
 ﻿  image_dxt.c
   image_helper.c
-G:\Development\Dragon\SOIL\src\image_helper.c(325,17): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-G:\Development\Dragon\SOIL\src\image_helper.c(366,13): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-G:\Development\Dragon\SOIL\src\image_helper.c(373,20): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-G:\Development\Dragon\SOIL\src\image_helper.c(415,13): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-G:\Development\Dragon\SOIL\src\image_helper.c(422,20): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+G:\Development\DragonEngine\SOIL\src\image_helper.c(325,17): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+G:\Development\DragonEngine\SOIL\src\image_helper.c(366,13): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+G:\Development\DragonEngine\SOIL\src\image_helper.c(373,20): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+G:\Development\DragonEngine\SOIL\src\image_helper.c(415,13): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+G:\Development\DragonEngine\SOIL\src\image_helper.c(422,20): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
   stb_image-1.09.c
   stb_image-1.16.c
   soil.c
-G:\Development\Dragon\SOIL\src\soil.c(1719,36): warning C4018: '<=': signed/unsigned mismatch
-G:\Development\Dragon\SOIL\src\soil.c(1729,19): warning C4018: '<': signed/unsigned mismatch
-G:\Development\Dragon\SOIL\src\soil.c(1867,39): warning C4267: 'function': conversion from 'size_t' to 'int', possible loss of data
+G:\Development\DragonEngine\SOIL\src\soil.c(1719,36): warning C4018: '<=': signed/unsigned mismatch
+G:\Development\DragonEngine\SOIL\src\soil.c(1729,19): warning C4018: '<': signed/unsigned mismatch
+G:\Development\DragonEngine\SOIL\src\soil.c(1867,39): warning C4267: 'function': conversion from 'size_t' to 'int', possible loss of data
   stb_image_aug.c
-G:\Development\Dragon\SOIL\include\SOIL\stbi_dds_aug_c.h(362,19): warning C4018: '>': signed/unsigned mismatch
-G:\Development\Dragon\SOIL\include\SOIL\stbi_dds_aug_c.h(366,19): warning C4018: '>': signed/unsigned mismatch
-G:\Development\Dragon\SOIL\include\SOIL\stbi_dds_aug_c.h(390,19): warning C4018: '<': signed/unsigned mismatch
-G:\Development\Dragon\SOIL\include\SOIL\stbi_dds_aug_c.h(427,19): warning C4018: '<': signed/unsigned mismatch
+G:\Development\DragonEngine\SOIL\include\SOIL\stbi_dds_aug_c.h(362,19): warning C4018: '>': signed/unsigned mismatch
+G:\Development\DragonEngine\SOIL\include\SOIL\stbi_dds_aug_c.h(366,19): warning C4018: '>': signed/unsigned mismatch
+G:\Development\DragonEngine\SOIL\include\SOIL\stbi_dds_aug_c.h(390,19): warning C4018: '<': signed/unsigned mismatch
+G:\Development\DragonEngine\SOIL\include\SOIL\stbi_dds_aug_c.h(427,19): warning C4018: '<': signed/unsigned mismatch
   Generating Code...
 stb_image-1.16.obj : warning LNK4006: stbi_write_bmp already defined in stb_image_aug.obj; second definition ignored
 stb_image-1.16.obj : warning LNK4006: stbi_write_tga already defined in stb_image_aug.obj; second definition ignored
@@ -121,4 +121,4 @@ stb_image-1.09.obj : warning LNK4006: stbi_hdr_load_from_memory already defined 
 stb_image-1.09.obj : warning LNK4006: stbi_hdr_test_file already defined in stb_image_aug.obj; second definition ignored
 stb_image-1.09.obj : warning LNK4006: stbi_hdr_load_from_file already defined in stb_image_aug.obj; second definition ignored
 stb_image-1.09.obj : warning LNK4006: stbi_register_loader already defined in stb_image_aug.obj; second definition ignored
-  SOIL.vcxproj -> G:\Development\Dragon\x64\Debug\SOIL.lib
+  SOIL.vcxproj -> G:\Development\DragonEngine\x64\Debug\SOIL.lib
