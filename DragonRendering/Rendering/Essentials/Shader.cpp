@@ -1,5 +1,6 @@
 #include "Shader.h"
 #include <iostream>
+#include <Logger/Logger.h>
 
 namespace DragonRendering
 {
@@ -14,7 +15,7 @@ namespace DragonRendering
         GLuint Location = glGetUniformLocation(m_ShaderProgramID, UniformName.c_str());
         if (Location == GL_INVALID_INDEX)
         {
-            std::cout << "Unirform [" << UniformName << "] not found in the Shader" << std::endl;
+            DRAGON_ERROR("Unirform [{0}] not found in the Shader!", UniformName);
             return -1;
         }
 

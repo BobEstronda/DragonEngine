@@ -7,6 +7,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <Rendering/Essentials/ShaderLoader.h>
+#include <Rendering/Essentials/TextureLoader.h>
 
 #include "Logger/Logger.h"
 
@@ -69,7 +70,7 @@ struct UVs
 	}
 };
 
-bool LoadTexture(const std::string& filepath, int& width,int& height,bool blended)
+/*bool LoadTexture(const std::string& filepath, int& width, int& height, bool blended)
 {
 	int channels = 0;
 
@@ -126,7 +127,7 @@ bool LoadTexture(const std::string& filepath, int& width,int& height,bool blende
 	std::cout << "Success to load the Texture!\n";
 
 	return true;
-}
+}*/
 
 int main() 
 {
@@ -207,7 +208,7 @@ int main()
 
 	//load texture
 	//create texture id and gen/bind the texture
-	GLuint texID;
+	/*GLuint texID;
 	glGenTextures(1, &texID);
 	glBindTexture(GL_TEXTURE_2D, texID);
 
@@ -219,14 +220,23 @@ int main()
 	{
 		DRAGON_ERROR("Failed to load Texture!");
 		return -1;
-	};
+	};*/
+
+	auto Texture = DragonRendering::TextureLoader::Create(DragonRendering::TextureType::PIXEL, 
+		"assets/textures/Checkpoint (Flag Idle)(64x64).png");
+
+	if (!Texture)
+	{
+		DRAGON_ERROR("Failed to create the Texture!");
+		return -1;
+	}
 
 	// make UVs
 	UVs uvs{};
 	auto generateUVs = [&](float startX, float startY, float spriteWidth, float spriteHeight)
 	{
-		uvs.width = spriteWidth / width;
-		uvs.height = spriteHeight / height;
+		uvs.width = spriteWidth / Texture->GetWidth();
+		uvs.height = spriteHeight / Texture->GetHeight();
 
 		uvs.u = startX * uvs.width;
 		uvs.v = startY * uvs.height;
@@ -355,7 +365,7 @@ int main()
 		Shader->SetUniformMat4("uProjection", projection);
 
 		glActiveTexture(GL_TEXTURE);
-		glBindTexture(GL_TEXTURE_2D, texID);
+		glBindTexture(GL_TEXTURE_2D, Texture->GetID());
 
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 

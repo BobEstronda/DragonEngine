@@ -71,10 +71,10 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(SolutionDir).\GLAD\glad\include;$(SolutionDir).\SOIL\include;$(SolutionDir).\Dependencies\GLM;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir).\GLAD\glad\include;$(SolutionDir).\SOIL\include;$(SolutionDir).\Dependencies\GLM;$(SolutionDir).\DragonLogger;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(SolutionDir).\GLAD\glad\include;$(SolutionDir).\SOIL\include;$(SolutionDir).\Dependencies\GLM;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir).\GLAD\glad\include;$(SolutionDir).\SOIL\include;$(SolutionDir).\Dependencies\GLM;$(SolutionDir).\DragonLogger;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -135,6 +135,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DragonLogger\DragonLogger.vcxproj">
+      <Project>{280a1c67-3e5c-46ac-bf2e-999141f2af36}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\Glad\Glad.vcxproj">
       <Project>{54151aef-8fa4-476f-904b-3d71bf19d087}</Project>
     </ProjectReference>
@@ -145,10 +148,14 @@
   <ItemGroup>
     <ClInclude Include="Rendering\Essentials\Shader.h" />
     <ClInclude Include="Rendering\Essentials\ShaderLoader.h" />
+    <ClInclude Include="Rendering\Essentials\Texture.h" />
+    <ClInclude Include="Rendering\Essentials\TextureLoader.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Rendering\Essentials\Shader.cpp" />
     <ClCompile Include="Rendering\Essentials\ShaderLoader.cpp" />
+    <ClCompile Include="Rendering\Essentials\Texture.cpp" />
+    <ClCompile Include="Rendering\Essentials\TextureLoader.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
