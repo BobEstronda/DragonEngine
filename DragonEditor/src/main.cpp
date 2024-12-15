@@ -8,57 +8,9 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <Rendering/Essentials/ShaderLoader.h>
 #include <Rendering/Essentials/TextureLoader.h>
+#include <Rendering/Core/Camera2D.h>
 
 #include "Logger/Logger.h"
-
-class Camera2D
-{
-private:
-	int m_Width, m_Height;
-	float m_Scale;
-
-	glm::vec2 m_Position;
-	glm::mat4 m_CameraMatrix, m_OrthoProjection;
-
-	bool m_bNeedsUpdate;
-public:
-	Camera2D() : Camera2D(640, 480)
-	{
-	}
-
-	Camera2D(int width,int height) : m_Width{width}, m_Height{height}, m_Scale{1.f}, m_Position{glm::vec2{0}},
-		m_CameraMatrix{1.f},m_OrthoProjection{1.f}, m_bNeedsUpdate{true}
-	{
-		//init ortho projection 
-		m_OrthoProjection = glm::ortho(
-			0.f,                           // Left
-			static_cast<float>(m_Width),   // Right
-			static_cast<float>(m_Height),  // Top 
-			0.f,                           // Botton
-			-1.f,                          // Near
-			1.f                            // Far
-		);
-	}
-
-	inline void SetScale(float scale) { m_Scale = scale; m_bNeedsUpdate = true; }
-
-	inline glm::mat4 GetCameraMatrix() { return m_CameraMatrix; }
-
-	void Update()
-	{
-		if (!m_bNeedsUpdate) return;
-
-		//Translate
-		glm::vec3 translate{ -m_Position.x, -m_Position.y, 0.f };
-		m_CameraMatrix = glm::translate(m_OrthoProjection, translate);
-
-		//Scale
-		glm::vec3 scale{ m_Scale, m_Scale, 0.f }; 
-		m_CameraMatrix *= glm::scale(glm::mat4(1.f), scale);
-
-		m_bNeedsUpdate = false;
-	}; 
-};
 
 struct UVs
 {
@@ -69,65 +21,6 @@ struct UVs
 
 	}
 };
-
-/*bool LoadTexture(const std::string& filepath, int& width, int& height, bool blended)
-{
-	int channels = 0;
-
-	unsigned char* image = SOIL_load_image(
-		filepath.c_str(),                  //Filename == image file to be loaded
-		&width,                            //Width == Width of the image
-		&height,                           //height == height of the image
-		&channels,                         //Channels == number of channels
-		SOIL_LOAD_AUTO                     //ForceChannels == Force the channels count 
-	);
-
-	if (!image)
-	{
-		std::cout << "SOIL Failed to load Image [" << filepath << "] -- " << SOIL_last_result;
-		return false;
-	}
-
-	GLint format = GL_RGBA;
-
-	if (channels == 3)
-	{
-		format = GL_RGB;
-	}
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-
-	if (blended)
-	{
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	}
-	else
-	{
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	}
-
-	glTexImage2D(
-		GL_TEXTURE_2D,                       //target == especifies the target texture
-		0,                                   //level == level of detail. 0 is base image level
-		format,                              //internal format == the number of color components
-		width,                               //width == width of the texture image
-		height,                              //height == height of the texture image
-		0,                                   //border
-		format,                              //format == format of the pixel data
-		GL_UNSIGNED_BYTE,                    //type == the data type of the pixel data
-		image                                //data
-	);
-
-	// Delete image Data from SOIL
-	SOIL_free_image_data(image);
-
-	std::cout << "Success to load the Texture!\n";
-
-	return true;
-}*/
 
 int main() 
 {
@@ -206,22 +99,6 @@ int main()
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	//load texture
-	//create texture id and gen/bind the texture
-	/*GLuint texID;
-	glGenTextures(1, &texID);
-	glBindTexture(GL_TEXTURE_2D, texID);
-
-	//create width and height from texture
-	int width{ 0 }, height{ 0 };
-
-	//now can load the texture
-	if (!LoadTexture("assets/textures/Checkpoint (Flag Idle)(64x64).png", width, height, false))
-	{
-		DRAGON_ERROR("Failed to load Texture!");
-		return -1;
-	};*/
-
 	auto Texture = DragonRendering::TextureLoader::Create(DragonRendering::TextureType::PIXEL, 
 		"assets/textures/Checkpoint (Flag Idle)(64x64).png");
 
@@ -260,7 +137,7 @@ int main()
 	};
 
 	//create Camera
-	Camera2D camera{}; 
+	DragonRendering::Camera2D camera{}; 
 	camera.SetScale(5.f);
 
 	// Create out first shader
