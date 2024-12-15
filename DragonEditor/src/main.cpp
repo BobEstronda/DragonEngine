@@ -3,11 +3,14 @@
 #include <Window/Window.h>
 #include <glad/glad.h>
 #include <iostream>
-#include <SOIL/SOIL.h>
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
+
+//#include <SOIL/SOIL.h>
+//#include <glm/glm.hpp>
+//#include <glm/gtc/matrix_transform.hpp>
+
 #include <Rendering/Essentials/ShaderLoader.h>
 #include <Rendering/Essentials/TextureLoader.h>
+#include <Rendering/Essentials/Vertex.h>
 #include <Rendering/Core/Camera2D.h>
 
 #include "Logger/Logger.h"
@@ -109,26 +112,46 @@ int main()
 	}
 
 	// make UVs
-	UVs uvs{};
+	UVs uVs{};
 	auto generateUVs = [&](float startX, float startY, float spriteWidth, float spriteHeight)
 	{
-		uvs.width = spriteWidth / Texture->GetWidth();
-		uvs.height = spriteHeight / Texture->GetHeight();
+		uVs.width = spriteWidth / Texture->GetWidth();
+		uVs.height = spriteHeight / Texture->GetHeight();
 
-		uvs.u = startX * uvs.width;
-		uvs.v = startY * uvs.height;
+		uVs.u = startX * uVs.width;
+		uVs.v = startY * uVs.height;
 	};
 
 	generateUVs(2, 0, 64, 64);
 
 	//create temp vertex data
-	float vertices[] =
-	{
-		10.f, 26.f, 0.0f, uvs.u, (uvs.v + uvs.height),              //TL 
-		10.f, 10.f, 0.0f, uvs.u, uvs.v,                             //BL
-		26.f, 10.f, 0.0f, (uvs.u + uvs.width), uvs.v,               //BR
-		26.f, 26.f, 0.0f, (uvs.u + uvs.width), (uvs.v + uvs.height) //TR
-	};
+	//float vertices[] =
+	//{
+	//	10.f, 26.f, 0.0f, uvs.u, (uvs.v + uvs.height),              //TL 
+	//	10.f, 10.f, 0.0f, uvs.u, uvs.v,                             //BL
+	//	26.f, 10.f, 0.0f, (uvs.u + uvs.width), uvs.v,               //BR
+	//	26.f, 26.f, 0.0f, (uvs.u + uvs.width), (uvs.v + uvs.height) //TR
+	//};
+
+	std::vector<DragonRendering::Vertex> vertices{};
+	DragonRendering::Vertex vTL{}, vTR{}, vBL{}, vBR{};
+
+	vTL.position = glm::vec2{ 10.f, 26.f };
+	vTL.uvs = glm::vec2{ uVs.u, (uVs.v + uVs.height) };
+
+	vTR.position = glm::vec2{ 10.f, 10.f };
+	vTR.uvs = glm::vec2{ uVs.u, uVs.v };
+
+	vBL.position = glm::vec2{ 26.f, 10.f };
+	vBL.uvs = glm::vec2{ (uVs.u + uVs.width), uVs.v };
+
+	vBR.position = glm::vec2{ 26.f, 26.f };
+	vBR.uvs = glm::vec2{ (uVs.u + uVs.width), (uVs.v + uVs.height) };
+
+	vertices.push_back(vTL);
+	vertices.push_back(vTR);
+	vertices.push_back(vBL);
+	vertices.push_back(vBR);
 
 	GLuint indices[] =
 	{
@@ -163,10 +186,10 @@ int main()
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
 	glBufferData(
-		GL_ARRAY_BUFFER,                      //the target buffer type
-		sizeof(vertices),                     //the size in bytes of the buffer object's new data store
-		vertices,                             //A pointer to the data that will be copied into the data store
-		GL_STATIC_DRAW                        //the expectedusage pattern of the data store
+		GL_ARRAY_BUFFER,                                         //the target buffer type
+		vertices.size() * sizeof(DragonRendering::Vertex),       //the size in bytes of the buffer object's new data store
+		vertices.data(),                                         //A pointer to the data that will be copied into the data store
+		GL_STATIC_DRAW                                           //the expectedusage pattern of the data store
 	);
 
 	// bind IBO
@@ -181,12 +204,12 @@ int main()
 	);
 
 	glVertexAttribPointer(
-		0,                                    //attribute 0 == the layout position in the shader
-		3,                                    //Size == Number of components per vertex
-		GL_FLOAT,                             //Type == the data type of the above components
-		GL_FALSE,                             //Normalized == Specifies if fixed-point data values should be normalized
-		5 * sizeof(float),                    //Stride == Specifies the byte offset between consecutive attributes
-		(void*)0                              //Pointer == Specifies the offset of the first component 
+		0,                                                 //attribute 0 == the layout position in the shader
+		2,                                                 //Size == Number of components per vertex
+		GL_FLOAT,                                          //Type == the data type of the above components
+		GL_FALSE,                                          //Normalized == Specifies if fixed-point data values should be normalized
+		sizeof(DragonRendering::Vertex),                   //Stride == Specifies the byte offset between consecutive attributes
+		(void*)offsetof(DragonRendering::Vertex, position) //Pointer == Specifies the offset of the first component 
 	);
 
 	glEnableVertexAttribArray(0);
@@ -196,11 +219,22 @@ int main()
 		2,
 		GL_FLOAT,
 		GL_FALSE,
-		5 * sizeof(float),
-		reinterpret_cast<void*>(sizeof(float) * 3)  //this the offset of the position data to the first UV coordinate
+		sizeof(DragonRendering::Vertex),
+		(void*)offsetof(DragonRendering::Vertex, uvs)  //this the offset of the position data to the first UV coordinate
 	);
 
 	glEnableVertexAttribArray(1);
+
+	glVertexAttribPointer(
+		2,
+		4,
+		GL_UNSIGNED_BYTE,
+		GL_TRUE,                                       // [0,1]  
+		sizeof(DragonRendering::Vertex),
+		(void*)offsetof(DragonRendering::Vertex, color)  //this the offset of the position data to the first UV coordinate
+	);
+
+	glEnableVertexAttribArray(2);
 
 	glBindVertexArray(0);
 
