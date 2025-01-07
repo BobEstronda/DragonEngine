@@ -14,26 +14,34 @@
 #include <Rendering/Essentials/Vertex.h>
 #include <Rendering/Core/Camera2D.h>
 
-#include <entt.hpp>
+//#include <entt.hpp>
+
+#include <Core/ECS/Entity.h>
+#include <Core/ECS/Components/IdentificationComponent.h>
+#include <Core/ECS/Components/TransformComponent.h>
+#include <Core/ECS/Components/SpriteComponent.h>
 
 #include "Logger/Logger.h"
 
+/*
 struct UVs
 {
 	float u{0.f}, v{0.f}, uv_width{0.f}, uv_height{0.f};
 
-	/*UVs() : u{0.f}, v{0.f}, width{0.f}, height{0.f}
-	{
+	//UVs() : u{0.f}, v{0.f}, width{0.f}, height{0.f}
+	//{
+	//
+	//}
+};*/
 
-	}*/
-};
-
+/*
 struct TransformComponent
 {
 	glm::vec2 position{ glm::vec2{0.f} }, scale{ glm::vec2{1.f} };
 	float rotation{ 0.f };
-};
+};*/
 
+/*
 struct SpriteComponent
 {
 	float width{ 0.f }, height{ 0.f };
@@ -51,7 +59,7 @@ struct SpriteComponent
 		uvs.u = start_x * uvs.uv_width;
 		uvs.v = start_y * uvs.uv_height;
 	}
-};
+};*/
 
 int main() 
 {
@@ -131,12 +139,7 @@ int main()
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	//Registry
-	auto pRegistry = std::make_unique<entt::registry>();
-	if (!pRegistry)
-	{
-		DRAGON_ERROR("Failed to create the entt registry!");
-		return -1;
-	}
+	//auto pRegistry = std::make_unique<entt::registry>();
 
 	auto Texture = DragonRendering::TextureLoader::Create(DragonRendering::TextureType::PIXEL, 
 		"assets/textures/Checkpoint (Flag Idle)(64x64).png");
@@ -149,17 +152,24 @@ int main()
 
 
 	// create new entity
-	auto ent1 = pRegistry->create();
+	//auto ent1 = pRegistry->create();
 
-	auto& transform = pRegistry->emplace<TransformComponent>(ent1, 
-		TransformComponent{
+	auto pRegistry = std::make_unique<DragonCore::ECS::Registry>();
+	if (!pRegistry)
+	{
+		DRAGON_ERROR("Failed to create the entt registry!");
+		return -1;
+	}
+
+	DragonCore::ECS::Entity entity1{ *pRegistry, "Ent1", "Test" };
+
+	auto& transform = entity1.AddComponent<DragonCore::ECS::TransformComponent>(DragonCore::ECS::TransformComponent{
 		.position = glm::vec2{ 10.f, 10.f } ,
 		.scale = glm::vec2{1.f,1.f},
 		.rotation = 0.f }
 		);
 
-	auto& sprite = pRegistry->emplace<SpriteComponent>(ent1,
-		SpriteComponent{
+	auto& sprite = entity1.AddComponent<DragonCore::ECS::SpriteComponent>(DragonCore::ECS::SpriteComponent{
 		.width = 64,
 		.height = 64,
 		.color = DragonRendering::Color{.R = 0, .G = 255,.B = 0, .A = 255},
@@ -214,6 +224,9 @@ int main()
 		0, 1, 2,
 		2, 3, 0
 	};
+
+	/*auto& id = entity1.GetComponent<DragonCore::ECS::IdentificationComponent>();
+	DRAGON_LOG("Name: {0}, Group: {1}, ID: {2}", id.name, id.group, id.entityID);*/
 
 	//create Camera
 	DragonRendering::Camera2D camera{}; 

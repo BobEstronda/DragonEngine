@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.12.35506.116
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GLAD", "Glad\Glad.vcxproj", "{54151AEF-8FA4-476F-904B-3D71BF19D087}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GLAD", "GLAD\Glad.vcxproj", "{54151AEF-8FA4-476F-904B-3D71BF19D087}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DragonUtilities", "DragonUtilities\DragonUtilities.vcxproj", "{47B01351-CF47-4C36-9688-186B37F6FC3B}"
 EndProject
@@ -16,6 +16,8 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DragonRendering", "DragonRendering\DragonRendering.vcxproj", "{4762336E-C4AE-4C78-A086-A49283D57CFB}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DragonLogger", "DragonLogger\DragonLogger.vcxproj", "{280A1C67-3E5C-46AC-BF2E-999141F2AF36}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DragonCore", "DragonCore\DragonCore.vcxproj", "{EA5CCAE5-E223-48D2-AA02-D8BCAE8E1F01}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -81,6 +83,14 @@ Global
 		{280A1C67-3E5C-46AC-BF2E-999141F2AF36}.Release|x64.Build.0 = Release|x64
 		{280A1C67-3E5C-46AC-BF2E-999141F2AF36}.Release|x86.ActiveCfg = Release|Win32
 		{280A1C67-3E5C-46AC-BF2E-999141F2AF36}.Release|x86.Build.0 = Release|Win32
+		{EA5CCAE5-E223-48D2-AA02-D8BCAE8E1F01}.Debug|x64.ActiveCfg = Debug|x64
+		{EA5CCAE5-E223-48D2-AA02-D8BCAE8E1F01}.Debug|x64.Build.0 = Debug|x64
+		{EA5CCAE5-E223-48D2-AA02-D8BCAE8E1F01}.Debug|x86.ActiveCfg = Debug|Win32
+		{EA5CCAE5-E223-48D2-AA02-D8BCAE8E1F01}.Debug|x86.Build.0 = Debug|Win32
+		{EA5CCAE5-E223-48D2-AA02-D8BCAE8E1F01}.Release|x64.ActiveCfg = Release|x64
+		{EA5CCAE5-E223-48D2-AA02-D8BCAE8E1F01}.Release|x64.Build.0 = Release|x64
+		{EA5CCAE5-E223-48D2-AA02-D8BCAE8E1F01}.Release|x86.ActiveCfg = Release|Win32
+		{EA5CCAE5-E223-48D2-AA02-D8BCAE8E1F01}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

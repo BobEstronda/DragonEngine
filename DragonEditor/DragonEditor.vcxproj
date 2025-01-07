@@ -71,11 +71,11 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(SolutionDir).\Dependencies\SDL\include;$(SolutionDir).\DragonUtilities;$(SolutionDir).\DragonWindow;$(SolutionDir).\GLAD\glad\include;$(SolutionDir).\SOIL\include;$(SolutionDir).\Dependencies\GLM;$(SolutionDir).\DragonRendering;$(SolutionDir).\DragonLogger;$(SolutionDir).\Dependencies\ENTT;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir).\Dependencies\SDL\include;$(SolutionDir).\DragonUtilities;$(SolutionDir).\DragonWindow;$(SolutionDir).\GLAD\glad\include;$(SolutionDir).\SOIL\include;$(SolutionDir).\Dependencies\GLM;$(SolutionDir).\DragonRendering;$(SolutionDir).\DragonLogger;$(SolutionDir).\Dependencies\ENTT;$(SolutionDir).\DragonCore;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir).\Dependencies\SDL\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(SolutionDir).\Dependencies\SDL\include;$(SolutionDir).\DragonUtilities;$(SolutionDir).\DragonWindow;$(SolutionDir).\GLAD\glad\include;$(SolutionDir).\SOIL\include;$(SolutionDir).\Dependencies\GLM;$(SolutionDir).\DragonRendering;$(SolutionDir).\DragonLogger;$(SolutionDir).\Dependencies\ENTT;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir).\Dependencies\SDL\include;$(SolutionDir).\DragonUtilities;$(SolutionDir).\DragonWindow;$(SolutionDir).\GLAD\glad\include;$(SolutionDir).\SOIL\include;$(SolutionDir).\Dependencies\GLM;$(SolutionDir).\DragonRendering;$(SolutionDir).\DragonLogger;$(SolutionDir).\Dependencies\ENTT;$(SolutionDir).\DragonCore;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir).\Dependencies\SDL\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -148,6 +148,9 @@
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DragonCore\DragonCore.vcxproj">
+      <Project>{ea5ccae5-e223-48d2-aa02-d8bcae8e1f01}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\DragonLogger\DragonLogger.vcxproj">
       <Project>{280a1c67-3e5c-46ac-bf2e-999141f2af36}</Project>
     </ProjectReference>
