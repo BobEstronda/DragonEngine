@@ -1,4 +1,5 @@
 #define SDL_MAIN_HANDLED 1;
+#define NOMINMAX
 
 #include <Window/Window.h>
 #include <glad/glad.h>
@@ -13,15 +14,42 @@
 #include <Rendering/Essentials/Vertex.h>
 #include <Rendering/Core/Camera2D.h>
 
+#include <entt.hpp>
+
 #include "Logger/Logger.h"
 
 struct UVs
 {
-	float u, v, width, height;
+	float u{0.f}, v{0.f}, uv_width{0.f}, uv_height{0.f};
 
-	UVs() : u{ 0.f }, v{ 0.f }, width{ 0.f }, height{ 0.f }
+	/*UVs() : u{0.f}, v{0.f}, width{0.f}, height{0.f}
 	{
 
+	}*/
+};
+
+struct TransformComponent
+{
+	glm::vec2 position{ glm::vec2{0.f} }, scale{ glm::vec2{1.f} };
+	float rotation{ 0.f };
+};
+
+struct SpriteComponent
+{
+	float width{ 0.f }, height{ 0.f };
+	UVs uvs{ .u = 0.f,.v = 0.f,.uv_width = 0.f,.uv_height = 0.f };
+
+	DragonRendering::Color color{ .R = 255,.G = 255,.B = 255,.A = 255 };
+
+	int start_x{ 0 }, start_y{ 0 };
+
+	void GenerateUVs(int TextureWidth, int TextureHeight)
+	{
+		uvs.uv_width = width / TextureWidth;
+		uvs.uv_height = height / TextureHeight;
+
+		uvs.u = start_x * uvs.uv_width;
+		uvs.v = start_y * uvs.uv_height;
 	}
 };
 
@@ -102,6 +130,14 @@ int main()
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+	//Registry
+	auto pRegistry = std::make_unique<entt::registry>();
+	if (!pRegistry)
+	{
+		DRAGON_ERROR("Failed to create the entt registry!");
+		return -1;
+	}
+
 	auto Texture = DragonRendering::TextureLoader::Create(DragonRendering::TextureType::PIXEL, 
 		"assets/textures/Checkpoint (Flag Idle)(64x64).png");
 
@@ -111,8 +147,28 @@ int main()
 		return -1;
 	}
 
-	// make UVs
-	UVs uVs{};
+
+	// create new entity
+	auto ent1 = pRegistry->create();
+
+	auto& transform = pRegistry->emplace<TransformComponent>(ent1, 
+		TransformComponent{
+		.position = glm::vec2{ 10.f, 10.f } ,
+		.scale = glm::vec2{1.f,1.f},
+		.rotation = 0.f }
+		);
+
+	auto& sprite = pRegistry->emplace<SpriteComponent>(ent1,
+		SpriteComponent{
+		.width = 64,
+		.height = 64,
+		.color = DragonRendering::Color{.R = 0, .G = 255,.B = 0, .A = 255},
+		.start_x = 2,
+		.start_y = 0 }
+		);
+
+	sprite.GenerateUVs(Texture->GetWidth(), Texture->GetHeight());
+	/*UVs uVs{};
 	auto generateUVs = [&](float startX, float startY, float spriteWidth, float spriteHeight)
 	{
 		uVs.width = spriteWidth / Texture->GetWidth();
@@ -122,7 +178,7 @@ int main()
 		uVs.v = startY * uVs.height;
 	};
 
-	generateUVs(2, 0, 64, 64);
+	generateUVs(2, 0, 64, 64);*/
 
 	//create temp vertex data
 	//float vertices[] =
@@ -136,22 +192,22 @@ int main()
 	std::vector<DragonRendering::Vertex> vertices{};
 	DragonRendering::Vertex vTL{}, vTR{}, vBL{}, vBR{};
 
-	vTL.position = glm::vec2{ 10.f, 26.f };
-	vTL.uvs = glm::vec2{ uVs.u, (uVs.v + uVs.height) };
+	vTL.position = glm::vec2{ /*10.f*/ transform.position.x, /*26.f*/  transform.position.y + sprite.height };
+	vTL.uvs = glm::vec2{ /*uVs.u*/ sprite.uvs.u, /*(uVs.v + uVs.height)*/ sprite.uvs.v + sprite.uvs.uv_height};
 
-	vTR.position = glm::vec2{ 10.f, 10.f };
-	vTR.uvs = glm::vec2{ uVs.u, uVs.v };
+	vTR.position = glm::vec2{ /*10.f*/ transform.position.x + sprite.width, /*10.f*/ transform.position.y + sprite.height };
+	vTR.uvs = glm::vec2{ /*uVs.u*/  sprite.uvs.u + sprite.uvs.uv_width, /*uVs.v*/ sprite.uvs.v + sprite.uvs.uv_height};
 
-	vBL.position = glm::vec2{ 26.f, 10.f };
-	vBL.uvs = glm::vec2{ (uVs.u + uVs.width), uVs.v };
+	vBL.position = glm::vec2{ /*26.f*/ transform.position.x,/*10.f*/ transform.position.y};
+	vBL.uvs = glm::vec2{ /*(uVs.u + uVs.width)*/  sprite.uvs.u , /*uVs.v*/  sprite.uvs.v };
 
-	vBR.position = glm::vec2{ 26.f, 26.f };
-	vBR.uvs = glm::vec2{ (uVs.u + uVs.width), (uVs.v + uVs.height) };
+	vBR.position = glm::vec2{ /*26.f*/ transform.position.x + sprite.width, /*26.f*/ transform.position.y };
+	vBR.uvs = glm::vec2{ /*(uVs.u + uVs.width) */  sprite.uvs.u + sprite.uvs.uv_width , /*(uVs.v + uVs.height)*/ sprite.uvs.v};
 
 	vertices.push_back(vTL);
-	vertices.push_back(vTR);
 	vertices.push_back(vBL);
 	vertices.push_back(vBR);
+	vertices.push_back(vTR);
 
 	GLuint indices[] =
 	{
