@@ -23,6 +23,8 @@
 
 #include "Logger/Logger.h"
 
+#include <Core/Resources/AssetManager.h>
+
 /*
 struct UVs
 {
@@ -141,14 +143,29 @@ int main()
 	//Registry
 	//auto pRegistry = std::make_unique<entt::registry>();
 
-	auto Texture = DragonRendering::TextureLoader::Create(DragonRendering::TextureType::PIXEL, 
-		"assets/textures/Checkpoint (Flag Idle)(64x64).png");
+	auto AssetManager = std::make_shared<DragonCore::Resources::AssetManager>();
+	if (!AssetManager)
+	{
+		DRAGON_ERROR("Failed to create the asset manager!");
+		return -1;
+	}
 
-	if (!Texture)
+	if (!AssetManager->AddTexture("FlagCheckpoint", "assets/textures/Checkpoint (Flag Idle)(64x64).png"))
+	{
+		DRAGON_ERROR("Failed to create the texture!");
+		return -1;
+	}
+
+	/*auto Texture = DragonRendering::TextureLoader::Create(DragonRendering::TextureType::PIXEL,
+		"assets/textures/Checkpoint (Flag Idle)(64x64).png");*/
+
+	auto& Texture = AssetManager->GetTexture("FlagCheckpoint");
+
+	/*if (!Texture)
 	{
 		DRAGON_ERROR("Failed to create the Texture!");
 		return -1;
-	}
+	}*/
 
 
 	// create new entity
@@ -177,7 +194,7 @@ int main()
 		.start_y = 0 }
 		);
 
-	sprite.GenerateUVs(Texture->GetWidth(), Texture->GetHeight());
+	sprite.GenerateUVs(Texture.GetWidth(), Texture.GetHeight());
 	/*UVs uVs{};
 	auto generateUVs = [&](float startX, float startY, float spriteWidth, float spriteHeight)
 	{
@@ -345,7 +362,7 @@ int main()
 		Shader->SetUniformMat4("uProjection", projection);
 
 		glActiveTexture(GL_TEXTURE);
-		glBindTexture(GL_TEXTURE_2D, Texture->GetID());
+		glBindTexture(GL_TEXTURE_2D, Texture.GetID());
 
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 

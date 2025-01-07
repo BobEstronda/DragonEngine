@@ -71,10 +71,10 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(SolutionDir).\DragonLogger;$(SolutionDir).\Dependencies\ENTT;$(SolutionDir).\DragonRendering;$(SolutionDir).\Dependencies\GLM;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir).\DragonLogger;$(SolutionDir).\Dependencies\ENTT;$(SolutionDir).\DragonRendering;$(SolutionDir).\Dependencies\GLM;$(SolutionDir).\GLAD\glad\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(SolutionDir).\DragonLogger;$(SolutionDir).\Dependencies\ENTT;$(SolutionDir).\DragonRendering;$(SolutionDir).\Dependencies\GLM;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir).\DragonLogger;$(SolutionDir).\Dependencies\ENTT;$(SolutionDir).\DragonRendering;$(SolutionDir).\Dependencies\GLM;$(SolutionDir).\GLAD\glad\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -141,6 +141,9 @@
     <ProjectReference Include="..\DragonRendering\DragonRendering.vcxproj">
       <Project>{4762336e-c4ae-4c78-a086-a49283d57cfb}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\GLAD\Glad.vcxproj">
+      <Project>{54151aef-8fa4-476f-904b-3d71bf19d087}</Project>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\ECS\Components\SpriteComponent.h" />
@@ -148,10 +151,12 @@
     <ClInclude Include="Core\ECS\Components\IdentificationComponent.h" />
     <ClInclude Include="Core\ECS\Entity.h" />
     <ClInclude Include="Core\ECS\Registry.h" />
+    <ClInclude Include="Core\Resources\AssetManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\ECS\Entity.cpp" />
     <ClCompile Include="Core\ECS\Registry.cpp" />
+    <ClCompile Include="Core\Resources\AssetManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Core\ECS\Entity.inl" />

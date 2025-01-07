@@ -20,7 +20,7 @@ namespace DragonRendering
 		GLuint GetUniformLocation(const std::string& UniformName);
 
 	public:
-
+		Shader() = default;
 		Shader(GLuint Program, const std::string& VertexPath, const std::string& FragmentPath);
 		~Shader();
 
