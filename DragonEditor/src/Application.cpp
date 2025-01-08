@@ -2,8 +2,6 @@
 
 #include <iostream>
 #include "Logger/Logger.h"
-//#include <glad/glad.h>
-//#include <Window/Window.h>
 
 #include <Rendering/Essentials/ShaderLoader.h>
 #include <Rendering/Essentials/TextureLoader.h>
@@ -24,15 +22,11 @@ namespace DragonEditor
 	{
 		DRAGON_INIT_LOGS(true, true);
 
-		//bool bRunning = true;
-
 		// init SDL
 		if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
 		{
 			std::string error = SDL_GetError();
-			std::cout << "Failed to initialize SDL!" << error << std::endl;
-
-			//bRunning = false;
+			DRAGON_ERROR("Failed to initialize SDL! [{0}]", error);
 			return false;
 		}
 
@@ -40,9 +34,7 @@ namespace DragonEditor
 		if (SDL_GL_LoadLibrary(NULL) != 0)
 		{
 			std::string error = SDL_GetError();
-			std::cout << "Failed to openGl Library!" << error << std::endl;
-
-			//bRunning = false;
+			DRAGON_ERROR("Failed to openGl Library! [{0}]", error);
 			return false;
 		}
 
@@ -60,9 +52,7 @@ namespace DragonEditor
 		SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 		SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
 
-		// Create Window 
-		/*DragonWindow::Window Window("Test DragonWindow", 640, 480, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, true, SDL_WINDOW_OPENGL);*/
-
+		// CreateWindow
 		m_pWindow = std::make_unique<DragonWindow::Window>(
 			"Test DragonWindow", 
 			640, 480, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 
@@ -70,9 +60,7 @@ namespace DragonEditor
 
 		if (!m_pWindow->GetWindow())
 		{
-			std::cout << "Failed the create the window" << std::endl;
-
-			//bRunning = false;
+			DRAGON_ERROR("Failed the create the window");
 			return false;
 		}
 
@@ -81,9 +69,7 @@ namespace DragonEditor
 		if (!m_pWindow->GetGLContext())
 		{
 			std::string error = SDL_GetError();
-			std::cout << "Failed to create Open GL Context!" << error << std::endl;
-
-			//bRunning = false;
+			DRAGON_ERROR("Failed to create Open GL Context! [{0}]", error);
 			return false;
 		}
 
@@ -93,18 +79,13 @@ namespace DragonEditor
 		//Initialize Glad
 		if (gladLoadGLLoader(SDL_GL_GetProcAddress) == 0)
 		{
-			std::cout << "Failed to LoadGL -> Glad" << std::endl;
-
-			//bRunning = false;
+			DRAGON_ERROR("Failed to LoadGL -> Glad");
 			return false;
 		}
 
 		//Enable Alpha Blending
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-		//Registry
-		//auto pRegistry = std::make_unique<entt::registry>();
 
 		auto AssetManager = std::make_shared<DragonCore::Resources::AssetManager>();
 		if (!AssetManager)
@@ -119,26 +100,13 @@ namespace DragonEditor
 			return false;
 		}
 
-		/*auto Texture = DragonRendering::TextureLoader::Create(DragonRendering::TextureType::PIXEL,
-			"assets/textures/Checkpoint (Flag Idle)(64x64).png");*/
-
 		auto& Texture = AssetManager->GetTexture("FlagCheckpoint");
-
-		/*if (!Texture)
-		{
-			DRAGON_ERROR("Failed to create the Texture!");
-			return -1;
-		}*/
-
-
-		// create new entity
-		//auto ent1 = pRegistry->create();
 
 		m_pRegistry = std::make_unique<DragonCore::ECS::Registry>();
 		if (!m_pRegistry)
 		{
 			DRAGON_ERROR("Failed to create the entt registry!");
-			return -1;
+			return false;
 		}
 
 		DragonCore::ECS::Entity entity1{ *m_pRegistry, "Ent1", "Test" };
@@ -159,41 +127,20 @@ namespace DragonEditor
 
 		sprite.GenerateUVs(Texture.GetWidth(), Texture.GetHeight());
 
-		/*UVs uVs{};
-		auto generateUVs = [&](float startX, float startY, float spriteWidth, float spriteHeight)
-		{
-			uVs.width = spriteWidth / Texture->GetWidth();
-			uVs.height = spriteHeight / Texture->GetHeight();
-
-			uVs.u = startX * uVs.width;
-			uVs.v = startY * uVs.height;
-		};
-
-		generateUVs(2, 0, 64, 64);*/
-
-		//create temp vertex data
-		//float vertices[] =
-		//{
-		//	10.f, 26.f, 0.0f, uvs.u, (uvs.v + uvs.height),              //TL 
-		//	10.f, 10.f, 0.0f, uvs.u, uvs.v,                             //BL
-		//	26.f, 10.f, 0.0f, (uvs.u + uvs.width), uvs.v,               //BR
-		//	26.f, 26.f, 0.0f, (uvs.u + uvs.width), (uvs.v + uvs.height) //TR
-		//};
-
 		std::vector<DragonRendering::Vertex> vertices{};
 		DragonRendering::Vertex vTL{}, vTR{}, vBL{}, vBR{};
 
-		vTL.position = glm::vec2{ /*10.f*/ transform.position.x, /*26.f*/  transform.position.y + sprite.height };
-		vTL.uvs = glm::vec2{ /*uVs.u*/ sprite.uvs.u, /*(uVs.v + uVs.height)*/ sprite.uvs.v + sprite.uvs.uv_height };
+		vTL.position = glm::vec2{ transform.position.x, transform.position.y + sprite.height };
+		vTL.uvs = glm::vec2{ sprite.uvs.u, sprite.uvs.v + sprite.uvs.uv_height };
 
-		vTR.position = glm::vec2{ /*10.f*/ transform.position.x + sprite.width, /*10.f*/ transform.position.y + sprite.height };
-		vTR.uvs = glm::vec2{ /*uVs.u*/  sprite.uvs.u + sprite.uvs.uv_width, /*uVs.v*/ sprite.uvs.v + sprite.uvs.uv_height };
+		vTR.position = glm::vec2{ transform.position.x + sprite.width, transform.position.y + sprite.height };
+		vTR.uvs = glm::vec2{ sprite.uvs.u + sprite.uvs.uv_width, sprite.uvs.v + sprite.uvs.uv_height };
 
-		vBL.position = glm::vec2{ /*26.f*/ transform.position.x,/*10.f*/ transform.position.y };
-		vBL.uvs = glm::vec2{ /*(uVs.u + uVs.width)*/  sprite.uvs.u , /*uVs.v*/  sprite.uvs.v };
+		vBL.position = glm::vec2{ transform.position.x, transform.position.y };
+		vBL.uvs = glm::vec2{ sprite.uvs.u , sprite.uvs.v };
 
-		vBR.position = glm::vec2{ /*26.f*/ transform.position.x + sprite.width, /*26.f*/ transform.position.y };
-		vBR.uvs = glm::vec2{ /*(uVs.u + uVs.width) */  sprite.uvs.u + sprite.uvs.uv_width , /*(uVs.v + uVs.height)*/ sprite.uvs.v };
+		vBR.position = glm::vec2{ transform.position.x + sprite.width, transform.position.y };
+		vBR.uvs = glm::vec2{ sprite.uvs.u + sprite.uvs.uv_width , sprite.uvs.v };
 
 		vertices.push_back(vTL);
 		vertices.push_back(vBL);
@@ -205,9 +152,6 @@ namespace DragonEditor
 			0, 1, 2,
 			2, 3, 0
 		};
-
-		/*auto& id = entity1.GetComponent<DragonCore::ECS::IdentificationComponent>();
-		DRAGON_LOG("Name: {0}, Group: {1}, ID: {2}", id.name, id.group, id.entityID);*/
 
 		//create Camera
 		auto camera = std::make_shared<DragonRendering::Camera2D>();
@@ -230,25 +174,6 @@ namespace DragonEditor
 			DRAGON_ERROR("Failed to the Load Shaders");
 			return false;
 		}
-		// Create out first shader
-		//auto Shader = DragonRendering::ShaderLoader::Create("assets/shaders/BasicShader.vert", "assets/shaders/BasicShader.frag");
-
-		/*if (!AssetManager->AddShader("BasicShader", "assets/shaders/BasicShader.vert", "assets/shaders/BasicShader.frag"))
-		{
-			DRAGON_ERROR("Failed to add Shader to the asset manager!");
-			return false;
-		}
-
-		auto Shader = AssetManager->GetShader("BasicShader");
-
-		if (Shader.GetShaderProgramID() == 0)
-		{
-			DRAGON_ERROR("Failed to create the shader!");
-			return false;
-		}*/
-
-		// create the vertex shader array object and the vertex buffer object
-		//GLuint VAO, VBO, IBO;
 
 		// generate the VAO
 		glGenVertexArrays(1, &VAO);
@@ -331,19 +256,10 @@ namespace DragonEditor
 		}
 
 		return true;
-
-		/*auto Shader = AssetManager->GetShader("BasicShader");
-
-		if (Shader.GetShaderProgramID() == 0)
-		{
-			DRAGON_ERROR("Failed to create the shader!");
-			return false;
-		}*/
 	}
 
 	void Application::ProcessEvents()
 	{
-		//process event
 		while (SDL_PollEvent(&m_Event))
 		{
 			switch (m_Event.type)
@@ -410,7 +326,6 @@ namespace DragonEditor
 
 		SDL_GL_SwapWindow(m_pWindow->GetWindow().get());
 
-		//camera.Update();
 		Shader.Disable();
 	}
 
