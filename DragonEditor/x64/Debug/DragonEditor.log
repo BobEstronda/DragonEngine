@@ -1,1 +1,4 @@
-﻿  DragonEditor.vcxproj -> G:\Development\DragonEngine\x64\Debug\DragonEditor.exe
+﻿  Application.cpp
+G:\Development\DragonEngine\DragonEditor\src\Application.cpp(141,4): warning C4305: 'return': truncation from 'int' to 'bool'
+G:\Development\DragonEngine\DragonEditor\src\Application.cpp(315): warning C4715: 'DragonEditor::Application::Initialize': not all control paths return a value
+  DragonEditor.vcxproj -> G:\Development\DragonEngine\x64\Debug\DragonEditor.exe

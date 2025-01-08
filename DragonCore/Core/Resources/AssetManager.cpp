@@ -63,14 +63,15 @@ namespace DragonCore::Resources
         return true;
     }
 
-    const DragonRendering::Shader& AssetManager::GetShader(const std::string& ShaderName)
+    DragonRendering::Shader& AssetManager::GetShader(const std::string& ShaderName)
     {
         auto ShaderItr = m_mapShader.find(ShaderName);
 
         if (ShaderItr == m_mapShader.end())
         {
             DRAGON_ERROR("Failed to get Shader [{0}], the texture does not exist!", ShaderName);
-            return DragonRendering::Shader();
+            DragonRendering::Shader Shader{};
+            return Shader;
         }
 
         return *ShaderItr->second;

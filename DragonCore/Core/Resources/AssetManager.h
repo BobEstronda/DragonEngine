@@ -22,6 +22,6 @@ namespace DragonCore::Resources
 		const DragonRendering::Texture& GetTexture(const std::string& TextureName);
 
 		const bool AddShader(const std::string& ShaderName, const std::string& VertexPath, const std::string& FragmentPath);
-		const DragonRendering::Shader& GetShader(const std::string& ShaderName);
+		DragonRendering::Shader& GetShader(const std::string& ShaderName);
 	};
 }

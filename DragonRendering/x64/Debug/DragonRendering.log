@@ -1,6 +1,8 @@
 ﻿  Shader.cpp
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\shared\minwindef.h(130,1): warning C4005: 'APIENTRY': macro redefinition
 G:\Development\DragonEngine\GLAD\glad\include\glad\glad.h(32,1): message : see previous definition of 'APIENTRY'
-  ShaderLoader.cpp
+  TextureLoader.cpp
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\shared\minwindef.h(130,1): warning C4005: 'APIENTRY': macro redefinition
+G:\Development\DragonEngine\GLAD\glad\include\glad\glad.h(32,1): message : see previous definition of 'APIENTRY'
   Generating Code...
   DragonRendering.vcxproj -> G:\Development\DragonEngine\x64\Debug\DragonRendering.lib
